@@ -12,6 +12,11 @@ export default tseslint.config(
     files: ['**/*.{ts,tsx}'],
     languageOptions: { globals: { ...globals.browser, ...globals.node } },
     plugins: { 'react-hooks': hooks, 'jsx-a11y': jsxA11y },
-    rules: { ...hooks.configs.recommended.rules, ...jsxA11y.configs.recommended.rules },
+    rules: {
+      ...hooks.configs.recommended.rules,
+      ...jsxA11y.configs.recommended.rules,
+      // Scrollable named regions need a keyboard focus stop (WCAG 2.1.1).
+      'jsx-a11y/no-noninteractive-tabindex': ['error', { roles: ['region'] }],
+    },
   },
 );

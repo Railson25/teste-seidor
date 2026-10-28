@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { EmployeeForm } from './components/EmployeeForm';
 import { Dialog } from './components/Dialog';
+import { EmployeeTable } from './components/EmployeeTable';
 import type { Employee, EmployeeInput } from './domain/employee';
 import { EmployeesProvider, useEmployeeActions, useEmployees } from './state/EmployeesProvider';
 
@@ -20,7 +21,7 @@ function Workspace() {
     <h1>Funcionários</h1><button onClick={() => setForm({})}>Novo funcionário</button>
     <p role="status">{message}</p>
     {warning && <aside aria-label="Aviso de armazenamento"><p>{warning}</p><button onClick={resetStorage}>Redefinir armazenamento com os dados desta sessão</button></aside>}
-    <ul>{employees.map(employee => <li key={employee.id}>{employee.name} <button onClick={() => setForm({ employee })}>Editar {employee.name}</button></li>)}</ul>
+    <EmployeeTable employees={employees} onEdit={employee => setForm({ employee })} />
     {form && <Dialog title={form.employee ? 'Editar funcionário' : 'Novo funcionário'} onClose={() => setForm(null)}><EmployeeForm employee={form.employee} employees={employees} onSave={save} onCancel={() => setForm(null)} /></Dialog>}
   </main>;
 }
