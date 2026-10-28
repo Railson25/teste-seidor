@@ -29,4 +29,53 @@ export default tseslint.config(
       ...hooks.configs.recommended.rules,
     },
   },
+  {
+    files: ['src/shared/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              regex: '(^|/)(features|app)(/|$)',
+              message: 'Shared deve permanecer independente das features e da aplicação.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ['src/app/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              regex: '(^|/)features/[^/]+/',
+              message:
+                'Importe a feature pela entrada pública da pasta, sem acessar arquivos internos.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ['src/features/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              regex: '(^|/)app(/|$)',
+              message: 'Features não devem depender da composição da aplicação.',
+            },
+          ],
+        },
+      ],
+    },
+  },
 );
