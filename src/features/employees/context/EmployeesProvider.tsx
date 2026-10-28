@@ -2,7 +2,7 @@ import { useCallback, useMemo, useReducer, useRef, useState } from 'react';
 import type { PropsWithChildren } from 'react';
 import type { Employee, EmployeeAction } from '../types/employee';
 import { employeeReducer } from './employeesReducer';
-import { readEmployees, writeEmployees } from '../services/employeeStorage';
+import { readEmployees, writeEmployees } from '../storage/employeeStorage';
 import { EmployeesContext, EmployeeActionsContext } from './EmployeesContext';
 
 export function EmployeesProvider({ children }: PropsWithChildren) {

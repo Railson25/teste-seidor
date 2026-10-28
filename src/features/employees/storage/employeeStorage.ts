@@ -1,4 +1,4 @@
-import { isEmployee } from '../domain/employee';
+import { isEmployee } from '../helpers/employeeValidation';
 import type { Employee } from '../types/employee';
 import type { StorageSnapshot } from '../types/storage';
 import { STORAGE_KEY, STORAGE_VERSION } from '../constants/storage';

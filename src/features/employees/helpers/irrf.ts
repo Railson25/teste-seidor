@@ -1,7 +1,7 @@
 import type { EmployeeInput } from '../types/employee';
 import type { TaxCalculation } from '../types/irrf';
 import { BASIS_POINTS_DIVISOR, DEPENDENT_DEDUCTION_CENTS, TAX_BRACKETS } from '../constants/irrf';
-import { validateEmployee } from './employee';
+import { validateEmployee } from './employeeValidation';
 
 export function calculateIrrf(input: EmployeeInput): TaxCalculation {
   if (Object.keys(validateEmployee(input)).length)

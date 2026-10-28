@@ -1,9 +1,6 @@
 const moneyFormatter = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
 
 export const formatMoney = (cents: number) => moneyFormatter.format(cents / 100);
-export const formatCpf = (cpf: string) =>
-  cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-
 // Parse decimal text directly; never multiply a floating-point monetary input.
 export function parseMoney(value: string): number {
   if (!/^\d+(?:[.,]\d{1,2})?$/.test(value.trim())) return NaN;

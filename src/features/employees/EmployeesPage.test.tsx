@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, expect, it, vi } from 'vitest';
-import { App } from './App';
+import { EmployeesPage } from './EmployeesPage';
 import { STORAGE_KEY } from './constants/storage';
 
 beforeEach(() => {
@@ -36,7 +36,7 @@ beforeEach(() => {
 
 it('cancela a exclusão e só remove após confirmação', async () => {
   const user = userEvent.setup();
-  render(<App />);
+  render(<EmployeesPage />);
   await user.click(screen.getByRole('button', { name: 'Excluir Pessoa fictícia' }));
   await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Cancelar' }));
   expect(screen.getByText('Pessoa fictícia')).toBeVisible();
@@ -47,7 +47,7 @@ it('cancela a exclusão e só remove após confirmação', async () => {
 });
 
 it('fecha o formulário por Escape sem alterar o registro', async () => {
-  render(<App />);
+  render(<EmployeesPage />);
   await userEvent.click(screen.getByRole('button', { name: 'Editar Pessoa fictícia' }));
   fireEvent(screen.getByRole('dialog'), new Event('cancel', { cancelable: true }));
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument();

@@ -1,5 +1,5 @@
 import type { EmployeeSummary as Summary } from '../types/employee';
-import { formatMoney } from '../utils/format';
+import { formatMoney } from '../../../shared/utils/currency';
 import styles from './EmployeeSummary.module.css';
 
 interface Props {

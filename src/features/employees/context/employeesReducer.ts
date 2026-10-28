@@ -1,4 +1,4 @@
-import { validateEmployee } from '../domain/employee';
+import { validateEmployee } from '../helpers/employeeValidation';
 import type { Employee, EmployeeAction } from '../types/employee';
 
 export function employeeReducer(

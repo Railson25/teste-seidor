@@ -1,7 +1,7 @@
 import type { Employee, EmployeeSummary } from '../types/employee';
-import { normalizeCpf } from '../domain/employee';
-import { calculateIrrf } from '../domain/irrf';
-import { normalizeText } from '../utils/text';
+import { normalizeCpf } from './employeeValidation';
+import { calculateIrrf } from './irrf';
+import { normalizeText } from '../../../shared/utils/text';
 
 export function filterEmployees(
   employees: readonly Employee[],
@@ -25,3 +25,6 @@ export function summarizeEmployees(employees: readonly Employee[]): EmployeeSumm
     { grossCents: 0, taxCents: 0 },
   );
 }
+
+export const formatCpf = (cpf: string) =>
+  cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');

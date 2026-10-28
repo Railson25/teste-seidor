@@ -1,6 +1,6 @@
 import type { Employee, EmployeeFormValues, EmployeeInput } from '../types/employee';
-import { normalizeCpf } from '../domain/employee';
-import { moneyToInput, parseMoney } from '../utils/format';
+import { normalizeCpf } from './employeeValidation';
+import { moneyToInput, parseMoney } from '../../../shared/utils/currency';
 
 export function createEmployeeFormValues(employee?: Employee): EmployeeFormValues {
   return {

@@ -1,6 +1,6 @@
 import type { Employee } from '../types/employee';
-import { formatMoney } from '../utils/format';
-import { calculateIrrf } from '../domain/irrf';
+import { formatMoney } from '../../../shared/utils/currency';
+import { calculateIrrf } from '../helpers/irrf';
 import { DEPENDENT_DEDUCTION_CENTS } from '../constants/irrf';
 
 export function TaxDetails({ employee }: { employee: Employee }) {

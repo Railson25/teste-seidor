@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { EmployeesContext, EmployeeActionsContext } from '../contexts/EmployeesContext';
+import { EmployeesContext, EmployeeActionsContext } from '../context/EmployeesContext';
 
 export function useEmployees() {
   const context = useContext(EmployeesContext);

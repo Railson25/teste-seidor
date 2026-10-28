@@ -6,7 +6,7 @@ import type {
   EmployeeFormValues,
   EmployeeInput,
 } from '../types/employee';
-import { validateEmployee } from '../domain/employee';
+import { validateEmployee } from '../helpers/employeeValidation';
 import { createEmployeeFormValues, toEmployeeInput } from '../helpers/employeeForm';
 
 export function useEmployeeForm(

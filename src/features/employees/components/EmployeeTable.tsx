@@ -1,8 +1,9 @@
 import type { Employee } from '../types/employee';
 import { PAGE_SIZE_OPTIONS } from '../constants/pagination';
 import { useEmployeeTable } from '../hooks/useEmployeeTable';
-import { formatCpf, formatMoney } from '../utils/format';
-import { calculateIrrf } from '../domain/irrf';
+import { formatMoney } from '../../../shared/utils/currency';
+import { formatCpf } from '../helpers/employees';
+import { calculateIrrf } from '../helpers/irrf';
 import styles from './EmployeeTable.module.css';
 
 interface Props {

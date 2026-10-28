@@ -1,8 +1,8 @@
 import { expect, it } from 'vitest';
 import { DEMO_EMPLOYEES } from './demo';
-import { validateEmployee } from '../domain/employee';
-import { calculateIrrf } from '../domain/irrf';
-import { employeeReducer } from '../contexts/employeesReducer';
+import { validateEmployee } from '../helpers/employeeValidation';
+import { calculateIrrf } from '../helpers/irrf';
+import { employeeReducer } from '../context/employeesReducer';
 
 it('fornece exemplos válidos, idempotentes e em faixas diferentes', () => {
   for (const employee of DEMO_EMPLOYEES) expect(validateEmployee(employee)).toEqual({});

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { calculateIrrf } from './irrf';
-import { isValidCpf, validateEmployee } from './employee';
-import { parseMoney } from '../utils/format';
+import { isValidCpf, validateEmployee } from './employeeValidation';
+import { parseMoney } from '../../../shared/utils/currency';
 
 export const validInput = {
   name: 'Pessoa de teste',
