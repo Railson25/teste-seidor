@@ -2,7 +2,7 @@ import { expect, it } from 'vitest';
 import { DEMO_EMPLOYEES } from './demo';
 import { validateEmployee } from '../domain/employee';
 import { calculateIrrf } from '../domain/irrf';
-import { employeeReducer } from '../state/reducer';
+import { employeeReducer } from '../contexts/employeesReducer';
 
 it('fornece exemplos válidos, idempotentes e em faixas diferentes', () => {
   for (const employee of DEMO_EMPLOYEES) expect(validateEmployee(employee)).toEqual({});

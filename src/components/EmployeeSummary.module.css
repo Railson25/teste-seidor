@@ -1,0 +1,54 @@
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin: 0 0 24px;
+}
+.stat {
+  border: 1px solid #dce3ed;
+  border-radius: 12px;
+  background: white;
+  padding: 22px 24px;
+}
+.stat dt {
+  font-size: 0.8rem;
+  color: #52627a;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.stat dt span {
+  color: #2459a0;
+  background: #eef4fd;
+  padding: 6px 9px;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+.stat dd {
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(1.3rem, 2.6vw, 1.8rem);
+  margin: 14px 0 7px;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
+}
+.stat p {
+  font-size: 0.72rem;
+  color: #52627a;
+  margin: 7px 0 0;
+  font-weight: 400;
+  letter-spacing: normal;
+}
+@media (max-width: 760px) {
+  .stats {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .stat {
+    padding: 18px;
+  }
+  .stat dd {
+    font-size: 1.6rem;
+  }
+}

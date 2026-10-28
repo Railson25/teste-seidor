@@ -1,14 +1,17 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { EmployeeForm } from './components/EmployeeForm';
 import { Dialog } from './components/Dialog';
 import { EmployeeTable } from './components/EmployeeTable';
 import { TaxDetails } from './components/TaxDetails';
 import { DEMO_EMPLOYEES } from './data/demo';
-import { calculateIrrf } from './domain/irrf';
-import { formatMoney } from './domain/format';
+import { summarizeEmployees } from './helpers/employees';
+import { DEPENDENT_DEDUCTION_CENTS } from './constants/irrf';
+import { EmployeeSummary } from './components/EmployeeSummary';
+import { formatMoney } from './utils/format';
 import styles from './App.module.css';
-import type { Employee, EmployeeInput } from './domain/employee';
-import { EmployeesProvider, useEmployeeActions, useEmployees } from './state/EmployeesProvider';
+import type { Employee, EmployeeInput } from './types/employee';
+import { EmployeesProvider } from './contexts/EmployeesProvider';
+import { useEmployeeActions, useEmployees } from './hooks/useEmployees';
 
 function Workspace() {
   const employees = useEmployees();
@@ -17,17 +20,8 @@ function Workspace() {
   const [message, setMessage] = useState('');
   const [removing, setRemoving] = useState<Employee | null>(null);
   const [inspecting, setInspecting] = useState<Employee | null>(null);
-  const totals = useMemo(
-    () =>
-      employees.reduce(
-        (sum, employee) => ({
-          gross: sum.gross + employee.grossSalaryCents,
-          tax: sum.tax + calculateIrrf(employee).taxCents,
-        }),
-        { gross: 0, tax: 0 },
-      ),
-    [employees],
-  );
+  const totals = useMemo(() => summarizeEmployees(employees), [employees]);
+  const newEmployeeButtonRef = useRef<HTMLButtonElement>(null);
 
   function save(input: EmployeeInput) {
     commit({ type: 'save', employee: { ...input, id: form?.employee?.id ?? crypto.randomUUID() } });
@@ -73,45 +67,17 @@ function Workspace() {
             >
               Carregar exemplos
             </button>
-            <button id="new-employee" onClick={() => setForm({})}>
+            <button id="new-employee" ref={newEmployeeButtonRef} onClick={() => setForm({})}>
               <span aria-hidden="true">＋ </span>Novo funcionário
             </button>
           </div>
         </div>
-        <dl className={styles.stats} aria-label="Resumo de todos os funcionários">
-          <div className={styles.stat}>
-            <dt>
-              Funcionários cadastrados<span aria-hidden="true">♙</span>
-            </dt>
-            <dd>
-              {employees.length.toLocaleString('pt-BR')}
-              <p>Total de pessoas na sua equipe</p>
-            </dd>
-          </div>
-          <div className={styles.stat}>
-            <dt>
-              Salários brutos<span aria-hidden="true">＄</span>
-            </dt>
-            <dd>
-              {formatMoney(totals.gross)}
-              <p>Soma mensal dos salários cadastrados</p>
-            </dd>
-          </div>
-          <div className={styles.stat}>
-            <dt>
-              IRRF total<span aria-hidden="true">％</span>
-            </dt>
-            <dd>
-              {formatMoney(totals.tax)}
-              <p>Imposto mensal calculado para a equipe</p>
-            </dd>
-          </div>
-        </dl>
+        <EmployeeSummary count={employees.length} summary={totals} />
         <div className={styles.notice}>
           <strong>Tabela do desafio</strong>
           <span>
-            Cálculo automático com dedução de R$ 189,59 por dependente. Consulte a memória de
-            cálculo de cada funcionário.
+            Cálculo automático com dedução de {formatMoney(DEPENDENT_DEDUCTION_CENTS)} por
+            dependente. Consulte a memória de cálculo de cada funcionário.
           </span>
         </div>
         <p role="status" className={message ? styles.success : 'srOnly'}>
@@ -132,12 +98,20 @@ function Workspace() {
           onInspect={setInspecting}
         />
         {inspecting && (
-          <Dialog title="Memória de cálculo" onClose={() => setInspecting(null)}>
+          <Dialog
+            fallbackFocusRef={newEmployeeButtonRef}
+            title="Memória de cálculo"
+            onClose={() => setInspecting(null)}
+          >
             <TaxDetails employee={inspecting} />
           </Dialog>
         )}
         {removing && (
-          <Dialog title="Excluir funcionário?" onClose={() => setRemoving(null)}>
+          <Dialog
+            fallbackFocusRef={newEmployeeButtonRef}
+            title="Excluir funcionário?"
+            onClose={() => setRemoving(null)}
+          >
             <p>
               O cadastro de <strong>{removing.name}</strong> será excluído. Esta ação não pode ser
               desfeita.
@@ -161,6 +135,7 @@ function Workspace() {
         )}
         {form && (
           <Dialog
+            fallbackFocusRef={newEmployeeButtonRef}
             title={form.employee ? 'Editar funcionário' : 'Novo funcionário'}
             onClose={() => setForm(null)}
           >

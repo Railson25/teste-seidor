@@ -1,23 +1,26 @@
 import { useEffect, useId, useRef } from 'react';
-import type { PropsWithChildren } from 'react';
+import type { PropsWithChildren, RefObject } from 'react';
 
-export function Dialog({
-  title,
-  onClose,
-  children,
-}: PropsWithChildren<{ title: string; onClose: () => void }>) {
+interface Props {
+  title: string;
+  onClose: () => void;
+  fallbackFocusRef?: RefObject<HTMLElement | null>;
+}
+
+export function Dialog({ title, onClose, children, fallbackFocusRef }: PropsWithChildren<Props>) {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   useEffect(() => {
     const dialog = ref.current!;
     const previous = document.activeElement;
+    const fallback = fallbackFocusRef?.current;
     dialog.showModal();
     return () => {
       dialog.close();
       if (previous instanceof HTMLElement && previous.isConnected) previous.focus();
-      else document.getElementById('new-employee')?.focus();
+      else if (fallback?.isConnected) fallback.focus();
     };
-  }, []);
+  }, [fallbackFocusRef]);
   return (
     <dialog
       ref={ref}

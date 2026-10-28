@@ -1,10 +1,5 @@
 import { validateEmployee } from '../domain/employee';
-import type { Employee } from '../domain/employee';
-
-export type EmployeeAction =
-  | { type: 'save'; employee: Employee }
-  | { type: 'remove'; id: string }
-  | { type: 'import'; employees: readonly Employee[] };
+import type { Employee, EmployeeAction } from '../types/employee';
 
 export function employeeReducer(
   state: readonly Employee[],

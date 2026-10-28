@@ -1,7 +1,7 @@
-import { useMemo, useState } from 'react';
-import type { Employee } from '../domain/employee';
-import { normalizeCpf } from '../domain/employee';
-import { formatCpf, formatMoney } from '../domain/format';
+import type { Employee } from '../types/employee';
+import { PAGE_SIZE_OPTIONS } from '../constants/pagination';
+import { useEmployeeTable } from '../hooks/useEmployeeTable';
+import { formatCpf, formatMoney } from '../utils/format';
 import { calculateIrrf } from '../domain/irrf';
 import styles from './EmployeeTable.module.css';
 
@@ -12,30 +12,22 @@ interface Props {
   onInspect?: (employee: Employee) => void;
 }
 
-const normalizeName = (text: string) =>
-  text
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLocaleLowerCase('pt-BR');
-
 export function EmployeeTable({ employees, onEdit, onRemove, onInspect }: Props) {
-  const [name, setName] = useState('');
-  const [cpf, setCpf] = useState('');
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const filtered = useMemo(
-    () =>
-      employees.filter(
-        (employee) =>
-          normalizeName(employee.name).includes(normalizeName(name.trim())) &&
-          employee.cpf.includes(normalizeCpf(cpf)),
-      ),
-    [employees, name, cpf],
-  );
-  const pages = Math.max(1, Math.ceil(filtered.length / pageSize));
-  const currentPage = Math.min(page, pages);
-  const start = (currentPage - 1) * pageSize;
-  const visible = filtered.slice(start, start + pageSize);
+  const {
+    name,
+    cpf,
+    pageSize,
+    filtered,
+    pages,
+    currentPage,
+    start,
+    visible,
+    updateName,
+    updateCpf,
+    updatePageSize,
+    clearFilters,
+    setPage,
+  } = useEmployeeTable(employees);
 
   return (
     <section className={styles.panel} aria-labelledby="employees-title">
@@ -56,10 +48,7 @@ export function EmployeeTable({ employees, onEdit, onRemove, onInspect }: Props)
             type="search"
             placeholder="Nome do funcionário"
             value={name}
-            onChange={(event) => {
-              setName(event.target.value);
-              setPage(1);
-            }}
+            onChange={(event) => updateName(event.target.value)}
           />
         </div>
         <div>
@@ -70,21 +59,11 @@ export function EmployeeTable({ employees, onEdit, onRemove, onInspect }: Props)
             inputMode="numeric"
             placeholder="CPF completo ou parcial"
             value={cpf}
-            onChange={(event) => {
-              setCpf(event.target.value.replace(/[^\d.-]/g, ''));
-              setPage(1);
-            }}
+            onChange={(event) => updateCpf(event.target.value)}
           />
         </div>
         {(name || cpf) && (
-          <button
-            className="textButton"
-            onClick={() => {
-              setName('');
-              setCpf('');
-              setPage(1);
-            }}
-          >
+          <button className="textButton" onClick={clearFilters}>
             Limpar filtros
           </button>
         )}
@@ -186,12 +165,9 @@ export function EmployeeTable({ employees, onEdit, onRemove, onInspect }: Props)
           <select
             id="page-size"
             value={pageSize}
-            onChange={(event) => {
-              setPageSize(Number(event.target.value));
-              setPage(1);
-            }}
+            onChange={(event) => updatePageSize(Number(event.target.value))}
           >
-            {[10, 25, 50].map((size) => (
+            {PAGE_SIZE_OPTIONS.map((size) => (
               <option key={size}>{size}</option>
             ))}
           </select>

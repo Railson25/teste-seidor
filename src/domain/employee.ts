@@ -1,17 +1,5 @@
-export interface Employee {
-  id: string;
-  name: string;
-  cpf: string;
-  grossSalaryCents: number;
-  socialSecurityCents: number;
-  dependents: number;
-}
-
-export type EmployeeInput = Omit<Employee, 'id'>;
-export type EmployeeErrors = Partial<Record<keyof EmployeeInput, string>>;
-
-// Keeps all intermediate tax multiplications safely within Number.MAX_SAFE_INTEGER.
-export const MAX_MONEY_CENTS = 99_999_999_999;
+import { MAX_DEPENDENTS, MAX_MONEY_CENTS, MAX_NAME_LENGTH } from '../constants/employee';
+import type { Employee, EmployeeErrors, EmployeeInput } from '../types/employee';
 
 export function normalizeCpf(value: string): string {
   return value.replace(/\D/g, '');
@@ -34,8 +22,8 @@ export function validateEmployee(
   editingId?: string,
 ): EmployeeErrors {
   const errors: EmployeeErrors = {};
-  if (!input.name.trim() || input.name.trim().length > 120)
-    errors.name = 'Informe um nome com até 120 caracteres.';
+  if (!input.name.trim() || input.name.trim().length > MAX_NAME_LENGTH)
+    errors.name = `Informe um nome com até ${MAX_NAME_LENGTH} caracteres.`;
   if (!isValidCpf(input.cpf)) errors.cpf = 'Informe um CPF válido.';
   else if (employees.some((employee) => employee.cpf === input.cpf && employee.id !== editingId))
     errors.cpf = 'Este CPF já está cadastrado.';
@@ -48,7 +36,7 @@ export function validateEmployee(
   if (
     !Number.isSafeInteger(input.dependents) ||
     input.dependents < 0 ||
-    input.dependents > Math.floor(Number.MAX_SAFE_INTEGER / 18959)
+    input.dependents > MAX_DEPENDENTS
   )
     errors.dependents = 'Informe uma quantidade inteira e não negativa.';
   return errors;

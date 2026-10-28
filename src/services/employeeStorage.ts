@@ -1,12 +1,7 @@
 import { isEmployee } from '../domain/employee';
-import type { Employee } from '../domain/employee';
-
-export const STORAGE_KEY = 'quadro.employees.v1';
-export interface StorageSnapshot {
-  employees: Employee[];
-  warning: string;
-  blocked: boolean;
-}
+import type { Employee } from '../types/employee';
+import type { StorageSnapshot } from '../types/storage';
+import { STORAGE_KEY, STORAGE_VERSION } from '../constants/storage';
 
 export function readEmployees(): StorageSnapshot {
   try {
@@ -17,7 +12,7 @@ export function readEmployees(): StorageSnapshot {
       !data ||
       typeof data !== 'object' ||
       !('version' in data) ||
-      data.version !== 1 ||
+      data.version !== STORAGE_VERSION ||
       !('employees' in data) ||
       !Array.isArray(data.employees)
     )
@@ -42,7 +37,7 @@ export function readEmployees(): StorageSnapshot {
 
 export function writeEmployees(employees: readonly Employee[]): string {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: 1, employees }));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: STORAGE_VERSION, employees }));
     return '';
   } catch {
     return 'Não foi possível salvar neste navegador. As alterações estão disponíveis apenas nesta sessão; mantenha esta aba aberta.';

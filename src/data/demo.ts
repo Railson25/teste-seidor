@@ -1,4 +1,4 @@
-import type { Employee } from '../domain/employee';
+import type { Employee } from '../types/employee';
 
 // Synthetic identities for exercising the challenge; not a real employee dataset.
 export const DEMO_EMPLOYEES: readonly Employee[] = [

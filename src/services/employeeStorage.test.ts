@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { employeeReducer } from './reducer';
-import { readEmployees, STORAGE_KEY, writeEmployees } from './storage';
-import type { Employee } from '../domain/employee';
+import { readEmployees, writeEmployees } from './employeeStorage';
+import { STORAGE_KEY } from '../constants/storage';
+import type { Employee } from '../types/employee';
 
 const employee: Employee = {
   id: '1',
@@ -14,27 +14,6 @@ const employee: Employee = {
 beforeEach(() => {
   localStorage.clear();
   vi.restoreAllMocks();
-});
-
-describe('reducer', () => {
-  it('cadastra, edita e remove sem mutar o estado anterior', () => {
-    const original = Object.freeze([employee]);
-    const edited = employeeReducer(original, {
-      type: 'save',
-      employee: { ...employee, name: 'Editado' },
-    });
-    expect(edited[0]?.name).toBe('Editado');
-    expect(original[0]?.name).toBe('Exemplo');
-    expect(employeeReducer(edited, { type: 'remove', id: '1' })).toEqual([]);
-  });
-  it('importa de forma idempotente e rejeita duplicatas ou dados inválidos', () => {
-    const action = {
-      type: 'import',
-      employees: [employee, { ...employee, id: '2' }, { ...employee, id: '3', name: '' }],
-    } as const;
-    expect(employeeReducer([], action)).toEqual([employee]);
-    expect(employeeReducer([employee], action)).toEqual([employee]);
-  });
 });
 
 describe('persistência versionada', () => {

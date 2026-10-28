@@ -2,7 +2,7 @@ import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, expect, it, vi } from 'vitest';
 import { App } from './App';
-import { STORAGE_KEY } from './state/storage';
+import { STORAGE_KEY } from './constants/storage';
 
 beforeEach(() => {
   localStorage.clear();

@@ -1,16 +1,9 @@
-import { createContext, useCallback, useContext, useMemo, useReducer, useState } from 'react';
+import { useCallback, useMemo, useReducer, useState } from 'react';
 import type { PropsWithChildren } from 'react';
-import type { Employee } from '../domain/employee';
-import { employeeReducer } from './reducer';
-import type { EmployeeAction } from './reducer';
-import { readEmployees, writeEmployees } from './storage';
-
-const EmployeesContext = createContext<readonly Employee[] | null>(null);
-const ActionsContext = createContext<{
-  commit: (action: EmployeeAction) => void;
-  warning: string;
-  resetStorage: () => void;
-} | null>(null);
+import type { EmployeeAction } from '../types/employee';
+import { employeeReducer } from './employeesReducer';
+import { readEmployees, writeEmployees } from '../services/employeeStorage';
+import { EmployeesContext, EmployeeActionsContext } from './EmployeesContext';
 
 export function EmployeesProvider({ children }: PropsWithChildren) {
   const [initial] = useState(readEmployees);
@@ -39,19 +32,7 @@ export function EmployeesProvider({ children }: PropsWithChildren) {
   );
   return (
     <EmployeesContext value={employees}>
-      <ActionsContext value={actions}>{children}</ActionsContext>
+      <EmployeeActionsContext value={actions}>{children}</EmployeeActionsContext>
     </EmployeesContext>
   );
-}
-
-export function useEmployees() {
-  const context = useContext(EmployeesContext);
-  if (!context) throw new Error('EmployeesProvider ausente.');
-  return context;
-}
-
-export function useEmployeeActions() {
-  const context = useContext(ActionsContext);
-  if (!context) throw new Error('EmployeesProvider ausente.');
-  return context;
 }
