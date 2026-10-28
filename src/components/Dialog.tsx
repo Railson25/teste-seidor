@@ -14,7 +14,14 @@ export function Dialog({ title, onClose, children }: PropsWithChildren<{ title: 
       else document.getElementById('new-employee')?.focus();
     };
   }, []);
-  return <dialog ref={ref} aria-labelledby={titleId} onCancel={event => { event.preventDefault(); onClose(); }}>
+  return <dialog ref={ref} aria-labelledby={titleId} onKeyDown={event => {
+    if (event.key !== 'Tab') return;
+    const controls = ref.current!.querySelectorAll<HTMLElement>('button:not(:disabled), input:not(:disabled), select:not(:disabled), a[href], [tabindex="0"]');
+    const first = controls[0];
+    const last = controls[controls.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+  }} onCancel={event => { event.preventDefault(); onClose(); }}>
     <div className="dialogHeader"><h2 id={titleId}>{title}</h2><button type="button" className="iconButton" aria-label="Fechar diálogo" onClick={onClose}>×</button></div>
     {children}
   </dialog>;

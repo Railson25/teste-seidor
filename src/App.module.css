@@ -18,7 +18,7 @@
 .stat dt { font-size: .8rem; color: #52627a; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 .stat dt span { color: #2459a0; background: #eef4fd; padding: 6px 9px; border-radius: 6px; font-size: 1rem; }
 .stat dd { font-variant-numeric: tabular-nums; font-size: clamp(1.3rem, 2.6vw, 1.8rem); margin: 14px 0 7px; font-weight: 700; letter-spacing: -.035em; overflow-wrap: anywhere; }
-.stat p { font-size: .72rem; color: #52627a; margin: 0; }
+.stat p { font-size: .72rem; color: #52627a; margin: 7px 0 0; font-weight: 400; letter-spacing: normal; }
 .notice { border: 1px solid #dbe5f5; border-radius: 10px; background: #edf3fc; padding: 14px 18px; display: flex; gap: 10px; align-items: baseline; color: #31557d; margin-bottom: 24px; font-size: .8rem; line-height: 1.6; }
 .notice strong { white-space: nowrap; }
 .success { font-size: .85rem; color: #17604a; }

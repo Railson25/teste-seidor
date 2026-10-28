@@ -33,7 +33,11 @@ function Workspace() {
     <div className={styles.hero}><div><p className={styles.eyebrow}>Pessoas, números e clareza</p><h1>Funcionários</h1><p>Sua equipe organizada. O cálculo do IRRF, sem complicação.</p></div><div className={styles.heroActions}>
     <button className="secondary" onClick={() => { commit({ type: 'import', employees: DEMO_EMPLOYEES }); setMessage('Exemplos fictícios carregados. Cadastros existentes foram preservados.'); }}>Carregar exemplos</button>
     <button id="new-employee" onClick={() => setForm({})}><span aria-hidden="true">＋ </span>Novo funcionário</button></div></div>
-    <dl className={styles.stats} aria-label="Resumo de todos os funcionários"><div className={styles.stat}><dt>Funcionários cadastrados<span aria-hidden="true">♙</span></dt><dd>{employees.length.toLocaleString('pt-BR')}</dd><p>Total de pessoas na sua equipe</p></div><div className={styles.stat}><dt>Salários brutos<span aria-hidden="true">＄</span></dt><dd>{formatMoney(totals.gross)}</dd><p>Soma mensal dos salários cadastrados</p></div><div className={styles.stat}><dt>IRRF total<span aria-hidden="true">％</span></dt><dd>{formatMoney(totals.tax)}</dd><p>Imposto mensal calculado para a equipe</p></div></dl>
+    <dl className={styles.stats} aria-label="Resumo de todos os funcionários">
+      <div className={styles.stat}><dt>Funcionários cadastrados<span aria-hidden="true">♙</span></dt><dd>{employees.length.toLocaleString('pt-BR')}<p>Total de pessoas na sua equipe</p></dd></div>
+      <div className={styles.stat}><dt>Salários brutos<span aria-hidden="true">＄</span></dt><dd>{formatMoney(totals.gross)}<p>Soma mensal dos salários cadastrados</p></dd></div>
+      <div className={styles.stat}><dt>IRRF total<span aria-hidden="true">％</span></dt><dd>{formatMoney(totals.tax)}<p>Imposto mensal calculado para a equipe</p></dd></div>
+    </dl>
     <div className={styles.notice}><strong>Tabela do desafio</strong><span>Cálculo automático com dedução de R$ 189,59 por dependente. Consulte a memória de cálculo de cada funcionário.</span></div>
     <p role="status" className={message ? styles.success : 'srOnly'}>{message}</p>
     {warning && <aside className={styles.warning} aria-label="Aviso de armazenamento" role="alert"><p>{warning}</p><button className="secondary" onClick={resetStorage}>Redefinir armazenamento com os dados desta sessão</button></aside>}
