@@ -5,3 +5,9 @@ playwright-report
 test-results
 .cache
 package-lock.json
+.private
+.aws
+.codex
+.agents
+.vscode
+.idea

@@ -8,3 +8,15 @@ test-results/
 .env*
 !.env.example
 *.local
+.private/
+.aws/
+.codex/
+.agents/
+.vscode/
+.idea/
+.npmrc
+*.log
+*.pem
+*.key
+*.p12
+*.pfx
