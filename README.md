@@ -68,37 +68,83 @@ Cada limite superior é inclusivo. Valores monetários são representados por ce
 
 Validações: nome não vazio com até 120 caracteres, CPF com verificadores válidos e único, dinheiro com até duas casas decimais, previdência até o salário bruto e dependentes inteiros não negativos. O teto monetário por campo é R$ 999.999.999,99, mantendo os cálculos no intervalo seguro dos inteiros JavaScript. Zero é aceito para salário e previdência.
 
-## Organização e decisões
+## Organização por features
+
+O código se organiza em três partes: a composição da aplicação, funcionalidades independentes e recursos compartilhados. A funcionalidade de funcionários contém tudo que lhe pertence, incluindo IRRF e persistência.
 
 ```text
 src/
-  components/   Formulário, tabela, resumos, diálogo e memória de cálculo
-  constants/    Tabela IRRF, limites, campos de formulário e paginação
-  contexts/     Contextos, provider e reducer de funcionários
-  data/         Exemplos demonstrativos
-  domain/       CPF, validações de negócio e cálculo de IRRF
-  helpers/      Conversão de formulário, filtros e resumo de funcionários
-  hooks/        Acesso aos contextos e lógica de formulário/listagem
-  services/     Leitura e gravação do armazenamento versionado
-  test/         Configuração compartilhada dos testes
-  types/        Modelos e contratos compartilhados
-  utils/        Formatação monetária e normalização de texto
-e2e/            Testes do build de produção no Chromium
+  app/
+    App.tsx                    Composição da aplicação
+    AppLayout.tsx              Cabeçalho, rodapé e conteúdo principal
+    AppLayout.module.css
+  features/
+    employees/
+      components/              Formulário, tabela, resumo e memória de cálculo
+      constants/               Tabela IRRF, limites, campos e paginação
+      context/                 Contextos, provider e reducer
+      data/                    Exemplos fictícios
+      helpers/                 Validações, cálculo, filtros e conversão de formulário
+      hooks/                   Estado da interface e acesso ao Context
+      storage/                 Leitura e gravação dos funcionários no navegador
+      types/                   Modelos e contratos internos
+      EmployeesPage.tsx        Coordenação dos fluxos da funcionalidade
+      EmployeesPage.module.css
+      index.ts                 Entrada pública: exporta somente EmployeesPage
+  shared/
+    ui/
+      Button/                  Botões com variantes e atributos nativos
+      TextField/               Campo, rótulo, ajuda e erro associados
+      Dialog/                  Diálogo nativo e gerenciamento de foco
+      ConfirmDialog/           Confirmação genérica por composição
+      FeedbackMessage/         Mensagens acessíveis e ações opcionais
+    styles/                    Tokens visuais, reset e utilitários globais
+    utils/                     Moeda e normalização genérica de texto
+  test/                        Setup e verificação dos limites arquiteturais
+  main.tsx                     Inicialização do React e estilos globais
+e2e/                           Fluxos completos no build de produção
 ```
 
-- **Pastas por responsabilidade:** domínio central, sem subdivisões por funcionalidade. Funções relacionadas ficam em arquivos coesos; os testes permanecem ao lado do código. Props exclusivas de um componente ficam nesse componente; contratos compartilhados ficam em `types`.
-- **Constants, helpers e utils:** constantes nomeiam a tabela, os limites, a configuração dos campos, as opções de paginação e o formato de armazenamento. Helpers conhecem funcionários — por exemplo, `filterEmployees` e `toEmployeeInput`. Utils oferecem operações genéricas como `formatMoney` e `normalizeText`, sem conhecer Context ou componentes.
-- **Domínio independente:** funções puras, sem React ou acesso ao navegador. Base e imposto são derivados, evitando armazenar resultados que possam ficar desatualizados.
-- **Hooks e componentes:** `useEmployeeForm` coordena valores, validação e foco; `useEmployeeTable` coordena filtros e paginação; `useEmployees` e `useEmployeeActions` encapsulam o acesso aos contextos. Os componentes apresentam os dados e encaminham as interações. O diálogo recebe uma referência opcional de retorno de foco, sem conhecer o cadastro.
-- **Context + reducer:** atende ao requisito explícito do teste. O reducer concentra transições e preserva imutabilidade; contextos separados expõem dados e ações. A persistência ocorre nas ações, fora do reducer. Uma referência interna mantém o estado mais recente para serializar ações antes da próxima renderização do React, preservando a correspondência entre memória e armazenamento em operações sucessivas.
-- **Persistência isolada:** formato `{ version: 1, employees: [...] }`, validado em tempo de execução, incluindo duplicidade de IDs e CPFs. Dados corrompidos ou de versão desconhecida não são sobrescritos automaticamente. A interface informa o problema e permite redefinir o armazenamento com os dados da sessão.
-- **Dependências proporcionais:** sem biblioteca de estado adicional, formulários, componentes, máscaras, moeda ou roteamento. As ferramentas de lint, formatação, testes e acessibilidade são dependências de desenvolvimento.
-- **Interface:** CSS Modules para os layouts e CSS compartilhado para tokens e controles básicos. Fonte do sistema, sem requisições externas. HTML semântico, erros associados aos campos, avisos anunciados, foco visível e diálogos nativos com retorno de foco.
-- **Desempenho:** filtros combinados memorizados; renderização de até 50 linhas; resumo memorizado; cálculos monetários sem biblioteca externa. Busca ignora acentos e caixa; CPF ignora pontuação. Paginação ajusta-se após filtros e remoções.
+### Dependências e entrada pública
 
-O volume esperado é o de uma avaliação frontend. Filtrar e salvar a coleção inteira continua sendo O(n), e `localStorage` é síncrono e limitado pelo navegador. Para múltiplos usuários ou grande volume, a evolução seria uma API com autorização, banco de dados e paginação/filtros no servidor, preservando as regras puras do domínio. Essa infraestrutura não faz parte do desafio.
+```mermaid
+flowchart TD
+  Main[main.tsx] --> App[app/App]
+  App --> Layout[AppLayout]
+  App --> Entry[features/employees/index.ts]
+  Entry --> Page[EmployeesPage]
+  Page --> Components[Componentes de funcionários]
+  Page --> Hooks[Hooks da feature]
+  Components --> UI[shared/ui]
+  Hooks --> Context[Context e reducer]
+  Hooks --> Helpers[Helpers da feature]
+  Context --> Storage[Storage da feature]
+  Storage --> Helpers
+  Helpers --> Utils[shared/utils]
+  UI --> Styles[shared/styles]
+```
 
-As dependências seguem a responsabilidade das camadas: domínio usa tipos e constantes; helpers combinam domínio e utils; services acessam o armazenamento; contextos coordenam estado e serviços; hooks conectam essas operações à interface. Domínio, helpers, utils, constantes e tipos não acessam React, componentes ou APIs do navegador.
+- **Aplicação:** importa a feature pela pasta pública, por exemplo `import { EmployeesPage } from '../features/employees'`. Não acessa seus hooks, tipos ou armazenamento internos. O provider é montado pela própria página.
+- **Feature:** reúne seus componentes, regras e estado. Uma nova funcionalidade terá sua própria pasta e entrada pública, sendo composta em `app`. Features não dependem de `app` nem de outras features; uma necessidade de coordenação pertence à composição da aplicação.
+- **Compartilhado:** não conhece funcionários ou IRRF. Formatação de moeda e normalização de texto são genéricas; formatação e validação de CPF permanecem em funcionários. Props exclusivas de componentes ficam junto deles; contratos internos compartilhados ficam em `types` da feature.
+- **Verificação:** o ESLint bloqueia dependências de `shared` para `app/features`, imports internos de features pela aplicação e dependências de features para `app`. Testes de arquitetura verificam os imports resolvidos, o isolamento entre features e a ausência de ciclos.
+
+### Estado, cálculo e persistência
+
+- **Cálculo e validações puros:** helpers independentes de React e do navegador. Base e imposto são derivados, evitando resultados armazenados que possam ficar desatualizados.
+- **Hooks:** `useEmployeeForm` coordena valores, validação e foco; `useEmployeeTable` coordena filtros e paginação; `useEmployees` e `useEmployeeActions` encapsulam o acesso aos contextos. Os componentes apresentam dados e encaminham interações.
+- **Context + reducer:** atende ao requisito do teste. O reducer preserva imutabilidade; contextos separados expõem dados e ações. A persistência ocorre nas ações, fora do reducer. Uma referência interna serializa ações antes da próxima renderização do React, mantendo memória e armazenamento consistentes em operações sucessivas.
+- **Storage:** conserva a chave `quadro.employees.v1` e o formato `{ version: 1, employees: [...] }`. A reorganização não exige migração dos cadastros existentes. A leitura valida dados, IDs e CPFs duplicados. Conteúdo corrompido ou de versão desconhecida não é sobrescrito automaticamente; a interface permite redefinir explicitamente o armazenamento com os dados da sessão.
+
+### Componentes, UI e desempenho
+
+- **UI reutilizável:** `Button` usa `type="button"` por padrão e aceita submissão explícita, referência e atributos nativos. `TextField` associa rótulo, ajuda e erro ao campo, preservando descrições adicionais, eventos e referência.
+- **Diálogos e mensagens:** `Dialog` mantém Escape, navegação por Tab e retorno de foco; `ConfirmDialog` recebe conteúdo e callbacks, deixando a exclusão com a feature. `FeedbackMessage` anuncia sucesso, aviso e erro e aceita ações por composição.
+- **Estilos:** tokens centralizam cores, espaçamentos, tipografia e foco. CSS Modules pertencem aos componentes, ao layout e à página; o CSS global mantém reset, controles nativos básicos e utilitários acessíveis. O painel preserva o visual e os fluxos anteriores. A fonte é do sistema, sem requisições externas.
+- **Dependências proporcionais:** apenas React e React DOM em produção. Sem biblioteca adicional de UI, formulários, estado, máscaras, moeda ou roteamento. Ferramentas de lint, formatação, testes e acessibilidade ficam em desenvolvimento.
+- **Desempenho:** filtros e resumo memorizados; renderização de até 50 linhas; formatador monetário reutilizado. Busca ignora acentos e caixa, e o filtro de CPF ignora pontuação. A paginação se ajusta após filtros e remoções.
+
+O volume esperado é o de uma avaliação frontend. Filtrar e salvar a coleção inteira continua sendo O(n), e `localStorage` é síncrono e limitado pelo navegador. Para múltiplos usuários ou grande volume, a evolução seria uma API com autorização, banco de dados e paginação/filtros no servidor, preservando os helpers de cálculo e substituindo o armazenamento dentro da feature. Essa infraestrutura não faz parte do desafio.
 
 ## Testes rápidos e verificações
 
@@ -125,11 +171,13 @@ Em Linux, caso faltem bibliotecas do sistema, use `npx playwright install --with
 
 | Camada                      | Ferramenta                         | Cenários                                                                                                                                                 |
 | --------------------------- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Domínio e estado            | Vitest                             | Todas as fronteiras de faixa, arredondamento, isenção, deduções, validações, imutabilidade, importação idempotente e armazenamento inválido/indisponível |
+| Regras e estado             | Vitest                             | Todas as fronteiras de faixa, arredondamento, isenção, deduções, validações, imutabilidade, importação idempotente e armazenamento inválido/indisponível |
 | Context e persistência      | Vitest + React Testing Library     | Ações sucessivas no mesmo evento, recarga do estado, recuperação de quota e redefinição de armazenamento corrompido em StrictMode                        |
 | Interface                   | React Testing Library + user-event | Erros e foco no formulário, valores em centavos, edição, cancelamento, exclusão confirmada, filtros e paginação após redução da lista                    |
 | Navegador real              | Playwright / Chromium              | CRUD completo, recálculo, recarga, CPF duplicado, corrupção, falha de escrita, navegação do diálogo e layout móvel                                       |
 | Acessibilidade automatizada | axe                                | Regras WCAG A/AA no painel vazio e preenchido, formulário inválido, memória de cálculo e tela móvel                                                      |
+
+Os contratos dos componentes compartilhados também são testados: submissão explícita de botões, referências e eventos nativos, associação de ajuda/erro e confirmação/cancelamento. As verificações arquiteturais fazem parte de `npm test`.
 
 `npm run test:watch` inicia o modo interativo. `npm run format` aplica a formatação. Os E2E usam um navegador isolado e iniciam `vite preview` automaticamente na porta 4173; não é necessário iniciar o servidor manualmente. Quando já existe um preview nessa porta, ele é reutilizado localmente. Gere novamente o build se alterar o código. Evidências de falhas ficam em `test-results/` e `playwright-report/`, ignoradas pelo Git. Screenshots de inspeção ficam em `.cache/`.
 
@@ -145,4 +193,4 @@ O projeto é entregue como repositório público, sem hospedagem da aplicação.
 
 ## Histórico
 
-Os commits seguem Conventional Commits e separam configuração, domínio, persistência, CRUD, filtros, exemplos, apresentação, testes, correções, CI e documentação. Consulte `git log --oneline --reverse` para acompanhar a evolução.
+Os commits seguem Conventional Commits e separam configuração, regras de cálculo, persistência, CRUD, filtros, exemplos, apresentação, arquitetura por features, UI compartilhada, testes, correções, CI e documentação. Consulte `git log --oneline --reverse` para acompanhar a evolução.
