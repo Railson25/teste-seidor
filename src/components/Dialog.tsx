@@ -1,0 +1,20 @@
+import { useEffect, useId, useRef } from 'react';
+import type { PropsWithChildren } from 'react';
+
+export function Dialog({ title, onClose, children }: PropsWithChildren<{ title: string; onClose: () => void }>) {
+  const ref = useRef<HTMLDialogElement>(null);
+  const titleId = useId();
+  useEffect(() => {
+    const dialog = ref.current!;
+    const previous = document.activeElement;
+    dialog.showModal();
+    return () => {
+      dialog.close();
+      if (previous instanceof HTMLElement && previous.isConnected) previous.focus();
+    };
+  }, []);
+  return <dialog ref={ref} aria-labelledby={titleId} onCancel={event => { event.preventDefault(); onClose(); }}>
+    <div className="dialogHeader"><h2 id={titleId}>{title}</h2><button type="button" className="iconButton" aria-label="Fechar diálogo" onClick={onClose}>×</button></div>
+    {children}
+  </dialog>;
+}
