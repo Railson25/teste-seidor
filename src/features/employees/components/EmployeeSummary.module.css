@@ -2,25 +2,25 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
-  margin: 0 0 24px;
+  margin: 0 0 var(--space-6);
 }
 .stat {
-  border: 1px solid #dce3ed;
-  border-radius: 12px;
-  background: white;
-  padding: 22px 24px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--space-3);
+  background: var(--color-surface);
+  padding: 22px var(--space-6);
 }
 .stat dt {
   font-size: 0.8rem;
-  color: #52627a;
+  color: var(--color-muted);
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
 }
 .stat dt span {
-  color: #2459a0;
-  background: #eef4fd;
+  color: var(--color-accent);
+  background: var(--color-summary-icon);
   padding: 6px 9px;
   border-radius: 6px;
   font-size: 1rem;
@@ -35,7 +35,7 @@
 }
 .stat p {
   font-size: 0.72rem;
-  color: #52627a;
+  color: var(--color-muted);
   margin: 7px 0 0;
   font-weight: 400;
   letter-spacing: normal;

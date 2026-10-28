@@ -1,0 +1,21 @@
+.success {
+  font-size: 0.85rem;
+  color: var(--color-success-text);
+  margin: 1em 0;
+}
+.warning {
+  padding: 18px;
+  border: 1px solid var(--color-warning-border);
+  background: var(--color-warning-surface);
+  color: var(--color-warning-text);
+  border-radius: var(--radius-card);
+  margin-bottom: var(--space-5);
+}
+.error {
+  color: var(--color-error-text);
+  font-size: var(--font-size-label);
+  background: var(--color-error-surface);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  margin: 1em 0;
+}

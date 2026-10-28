@@ -1,3 +1,6 @@
+import { ConfirmDialog } from '../../shared/ui/ConfirmDialog/ConfirmDialog';
+import { FeedbackMessage } from '../../shared/ui/FeedbackMessage/FeedbackMessage';
+import { Button } from '../../shared/ui/Button/Button';
 import { useMemo, useRef, useState } from 'react';
 import { EmployeeForm } from './components/EmployeeForm';
 import { Dialog } from '../../shared/ui/Dialog/Dialog';
@@ -41,18 +44,18 @@ function Workspace() {
           <p>Sua equipe organizada. O cálculo do IRRF, sem complicação.</p>
         </div>
         <div className={styles.heroActions}>
-          <button
-            className="secondary"
+          <Button
+            variant="secondary"
             onClick={() => {
               commit({ type: 'import', employees: DEMO_EMPLOYEES });
               setMessage('Exemplos fictícios carregados. Cadastros existentes foram preservados.');
             }}
           >
             Carregar exemplos
-          </button>
-          <button id="new-employee" ref={newEmployeeButtonRef} onClick={() => setForm({})}>
+          </Button>
+          <Button id="new-employee" ref={newEmployeeButtonRef} onClick={() => setForm({})}>
             <span aria-hidden="true">＋ </span>Novo funcionário
-          </button>
+          </Button>
         </div>
       </div>
       <EmployeeSummary count={employees.length} summary={totals} />
@@ -63,16 +66,14 @@ function Workspace() {
           Consulte a memória de cálculo de cada funcionário.
         </span>
       </div>
-      <p role="status" className={message ? styles.success : 'srOnly'}>
-        {message}
-      </p>
+      <FeedbackMessage variant="success">{message}</FeedbackMessage>
       {warning && (
-        <aside className={styles.warning} aria-label="Aviso de armazenamento" role="alert">
+        <FeedbackMessage variant="warning" aria-label="Aviso de armazenamento">
           <p>{warning}</p>
-          <button className="secondary" onClick={resetStorage}>
+          <Button variant="secondary" onClick={resetStorage}>
             Redefinir armazenamento com os dados desta sessão
-          </button>
-        </aside>
+          </Button>
+        </FeedbackMessage>
       )}
       <EmployeeTable
         employees={employees}
@@ -90,31 +91,22 @@ function Workspace() {
         </Dialog>
       )}
       {removing && (
-        <Dialog
+        <ConfirmDialog
           fallbackFocusRef={newEmployeeButtonRef}
           title="Excluir funcionário?"
-          onClose={() => setRemoving(null)}
+          confirmLabel="Confirmar exclusão"
+          onCancel={() => setRemoving(null)}
+          onConfirm={() => {
+            commit({ type: 'remove', id: removing.id });
+            setMessage('Funcionário excluído.');
+            setRemoving(null);
+          }}
         >
           <p>
             O cadastro de <strong>{removing.name}</strong> será excluído. Esta ação não pode ser
             desfeita.
           </p>
-          <div className="dialogActions">
-            <button className="secondary" onClick={() => setRemoving(null)}>
-              Cancelar
-            </button>
-            <button
-              className="danger"
-              onClick={() => {
-                commit({ type: 'remove', id: removing.id });
-                setMessage('Funcionário excluído.');
-                setRemoving(null);
-              }}
-            >
-              Confirmar exclusão
-            </button>
-          </div>
-        </Dialog>
+        </ConfirmDialog>
       )}
       {form && (
         <Dialog

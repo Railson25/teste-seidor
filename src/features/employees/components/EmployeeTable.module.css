@@ -1,7 +1,7 @@
 .panel {
-  background: white;
-  border: 1px solid #dce3ed;
-  border-radius: 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--space-4);
   overflow: hidden;
 }
 .heading {
@@ -9,29 +9,29 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 26px 28px 0;
+  padding: 26px var(--space-7) 0;
 }
 .heading h2 {
   font-size: 1.1rem;
   margin: 0 0 6px;
 }
 .heading p {
-  color: #52627a;
+  color: var(--color-muted);
   font-size: 0.875rem;
   margin: 0;
 }
 .badge {
-  background: #edf3fc;
-  color: #244e8b;
+  background: var(--color-tint);
+  color: var(--color-tax-text);
   border-radius: 6px;
   padding: 6px 10px;
   font-size: 0.8rem;
   white-space: nowrap;
 }
 .filters {
-  padding: 24px 28px;
+  padding: var(--space-6) var(--space-7);
   display: flex;
-  gap: 16px;
+  gap: var(--space-4);
   align-items: end;
 }
 .filters > div {
@@ -48,13 +48,13 @@
   white-space: nowrap;
 }
 .tableRegion thead {
-  background: #f7f9fc;
-  color: #52627a;
+  background: var(--color-table-header);
+  color: var(--color-muted);
 }
 .tableRegion th,
 .tableRegion td {
-  padding: 17px 20px;
-  border-bottom: 1px solid #e7ecf3;
+  padding: 17px var(--space-5);
+  border-bottom: 1px solid var(--color-divider);
 }
 .tableRegion thead th {
   font-weight: 600;
@@ -65,7 +65,7 @@
   min-width: 180px;
 }
 .tableRegion tr:hover {
-  background: #fafcff;
+  background: var(--color-row-hover);
 }
 .name {
   display: block;
@@ -75,21 +75,21 @@
 }
 .cpf {
   display: block;
-  color: #52627a;
+  color: var(--color-muted);
   font-size: 0.75rem;
   font-weight: 400;
   margin-top: 6px;
 }
 .exempt {
-  color: #16624b;
-  background: #e8f5ef;
+  color: var(--color-exempt-text);
+  background: var(--color-exempt-surface);
   border-radius: 5px;
   padding: 5px 9px;
   font-weight: 600;
 }
 .tax {
   font-weight: 700;
-  color: #244e8b;
+  color: var(--color-tax-text);
 }
 .actions {
   display: flex;
@@ -99,10 +99,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 28px;
-  color: #52627a;
+  padding: var(--space-4) var(--space-7);
+  color: var(--color-muted);
   font-size: 0.8rem;
-  gap: 16px;
+  gap: var(--space-4);
 }
 .pagination > div {
   display: flex;
@@ -117,45 +117,45 @@
 .pagination select {
   width: auto;
   min-height: 38px;
-  padding: 6px 24px 6px 10px;
+  padding: 6px var(--space-6) 6px 10px;
 }
 .pagination button {
   min-height: 38px;
-  padding: 6px 12px;
+  padding: 6px var(--space-3);
 }
 .empty {
   text-align: center;
-  padding: 52px 20px 60px;
-  border-block: 1px solid #e7ecf3;
+  padding: 52px var(--space-5) 60px;
+  border-block: 1px solid var(--color-divider);
 }
 .empty > span {
   display: inline-grid;
   place-items: center;
   width: 52px;
   height: 52px;
-  color: #2459a0;
-  background: #edf3fc;
+  color: var(--color-accent);
+  background: var(--color-tint);
   border-radius: 14px;
   font-size: 2rem;
 }
 .empty h3 {
   font-size: 1rem;
-  margin: 18px 0 8px;
+  margin: 18px 0 var(--space-2);
 }
 .empty p {
-  color: #52627a;
+  color: var(--color-muted);
   font-size: 0.875rem;
 }
 @media (max-width: 640px) {
   .heading {
-    padding: 20px 16px 0;
+    padding: var(--space-5) var(--space-4) 0;
     align-items: start;
   }
   .heading p {
     line-height: 1.5;
   }
   .filters {
-    padding: 20px 16px;
+    padding: var(--space-5) var(--space-4);
     flex-direction: column;
     align-items: stretch;
   }
@@ -163,7 +163,7 @@
     width: 100%;
   }
   .pagination {
-    padding: 16px;
+    padding: var(--space-4);
     flex-direction: column;
     align-items: start;
   }

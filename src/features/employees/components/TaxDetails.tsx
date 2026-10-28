@@ -1,3 +1,4 @@
+import styles from './TaxDetails.module.css';
 import type { Employee } from '../types/employee';
 import { formatMoney } from '../../../shared/utils/currency';
 import { calculateIrrf } from '../helpers/irrf';
@@ -7,8 +8,8 @@ export function TaxDetails({ employee }: { employee: Employee }) {
   const tax = calculateIrrf(employee);
   return (
     <>
-      <p className="formIntro">{employee.name}</p>
-      <dl className="calculation">
+      <p className={styles.intro}>{employee.name}</p>
+      <dl className={styles.calculation}>
         <div>
           <dt>Salário bruto</dt>
           <dd>{formatMoney(employee.grossSalaryCents)}</dd>
@@ -23,7 +24,7 @@ export function TaxDetails({ employee }: { employee: Employee }) {
           </dt>
           <dd>− {formatMoney(tax.dependentDeductionCents)}</dd>
         </div>
-        <div className="calculationTotal">
+        <div className={styles.calculationTotal}>
           <dt>Base de cálculo</dt>
           <dd>{formatMoney(tax.baseCents)}</dd>
         </div>
@@ -35,16 +36,16 @@ export function TaxDetails({ employee }: { employee: Employee }) {
           <dt>Parcela a deduzir</dt>
           <dd>− {formatMoney(tax.deductionCents)}</dd>
         </div>
-        <div className="calculationTotal">
+        <div className={styles.calculationTotal}>
           <dt>IRRF mensal</dt>
           <dd>{formatMoney(tax.taxCents)}</dd>
         </div>
       </dl>
-      <p className="calculationNote">
+      <p className={styles.calculationNote}>
         IRRF = base × alíquota − parcela a deduzir. Base e imposto têm mínimo de zero; o imposto é
         arredondado ao centavo.
       </p>
-      <p className="calculationNote">
+      <p className={styles.calculationNote}>
         Tabela fixa do desafio técnico. Este demonstrativo não substitui um sistema de folha de
         pagamento.
       </p>

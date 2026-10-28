@@ -1,5 +1,7 @@
 import { useEffect, useId, useRef } from 'react';
 import type { PropsWithChildren, RefObject } from 'react';
+import { Button } from '../Button/Button';
+import styles from './Dialog.module.css';
 
 interface Props {
   title: string;
@@ -23,6 +25,7 @@ export function Dialog({ title, onClose, children, fallbackFocusRef }: PropsWith
   }, [fallbackFocusRef]);
   return (
     <dialog
+      className={styles.dialog}
       ref={ref}
       aria-labelledby={titleId}
       onKeyDown={(event) => {
@@ -45,11 +48,11 @@ export function Dialog({ title, onClose, children, fallbackFocusRef }: PropsWith
         onClose();
       }}
     >
-      <div className="dialogHeader">
+      <div className={styles.header}>
         <h2 id={titleId}>{title}</h2>
-        <button type="button" className="iconButton" aria-label="Fechar diálogo" onClick={onClose}>
+        <Button variant="icon" aria-label="Fechar diálogo" onClick={onClose}>
           ×
-        </button>
+        </Button>
       </div>
       {children}
     </dialog>

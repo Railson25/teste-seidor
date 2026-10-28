@@ -1,21 +1,21 @@
 .breadcrumb {
   font-size: 0.75rem;
-  color: #52627a;
-  margin: 0 0 28px;
+  color: var(--color-muted);
+  margin: 0 0 var(--space-7);
 }
 .breadcrumb span {
-  color: #173c72;
+  color: var(--color-breadcrumb);
   margin-left: 10px;
 }
 .hero {
   display: flex;
   justify-content: space-between;
-  gap: 24px;
+  gap: var(--space-6);
   align-items: center;
   margin-bottom: 30px;
 }
 .eyebrow {
-  color: #2459a0;
+  color: var(--color-accent);
   text-transform: uppercase;
   font-size: 0.68rem;
   font-weight: 700;
@@ -29,7 +29,7 @@
   margin: 0 0 10px;
 }
 .hero p:last-child {
-  color: #52627a;
+  color: var(--color-muted);
   font-size: 0.875rem;
   margin: 0;
   line-height: 1.65;
@@ -40,53 +40,41 @@
   flex-shrink: 0;
 }
 .notice {
-  border: 1px solid #dbe5f5;
+  border: 1px solid var(--color-notice-border);
   border-radius: 10px;
-  background: #edf3fc;
+  background: var(--color-tint);
   padding: 14px 18px;
   display: flex;
   gap: 10px;
   align-items: baseline;
-  color: #31557d;
-  margin-bottom: 24px;
+  color: var(--color-notice-text);
+  margin-bottom: var(--space-6);
   font-size: 0.8rem;
   line-height: 1.6;
 }
 .notice strong {
   white-space: nowrap;
 }
-.success {
-  font-size: 0.85rem;
-  color: #17604a;
-}
-.warning {
-  padding: 18px;
-  border: 1px solid #c49228;
-  background: #fffae9;
-  color: #61400b;
-  border-radius: 12px;
-  margin-bottom: 20px;
-}
 .guide {
   display: grid;
   grid-template-columns: 1fr 1.5fr;
   gap: 30px;
-  border-top: 1px solid #dce3ed;
-  margin-top: 36px;
-  padding: 28px 0;
+  border-top: 1px solid var(--color-border);
+  margin-top: var(--space-9);
+  padding: var(--space-7) 0;
 }
 .guide h2 {
   font-size: 0.9rem;
-  margin: 0 0 8px;
+  margin: 0 0 var(--space-2);
 }
 .guide p {
-  color: #52627a;
+  color: var(--color-muted);
   font-size: 0.8rem;
   line-height: 1.7;
   margin: 0;
 }
 .formula {
-  border-left: 2px solid #a9c2e6;
+  border-left: 2px solid var(--color-formula-border);
   padding-left: 22px;
 }
 @media (max-width: 760px) {

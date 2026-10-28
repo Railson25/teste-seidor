@@ -1,85 +1,100 @@
 .topbar {
-  border-bottom: 1px solid #dce3ed;
-  background: #fff;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
 }
 .nav {
   max-width: 1440px;
   margin: auto;
   min-height: 84px;
-  padding: 0 40px;
+  padding: 0 var(--space-10);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: var(--space-5);
 }
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-3);
   font-size: 1.2rem;
   font-weight: 800;
   letter-spacing: -0.04em;
 }
 .brandMark {
-  width: 36px;
-  height: 36px;
+  width: var(--space-9);
+  height: var(--space-9);
   display: grid;
   place-items: center;
-  background: #194c91;
-  color: white;
+  background: var(--color-primary);
+  color: var(--color-surface);
   border-radius: 10px;
   font-size: 1.65rem;
 }
 .navLabel {
   font-size: 0.7rem;
   letter-spacing: 0.12em;
-  color: #52627a;
+  color: var(--color-muted);
   font-weight: 600;
 }
 .localBadge {
-  color: #3e526f;
+  color: var(--color-subtle-text);
   font-size: 0.75rem;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
 }
 .localBadge::before {
   content: '';
   width: 7px;
   height: 7px;
-  background: #1e8061;
+  background: var(--color-status-dot);
   border-radius: 50%;
 }
 .main {
   max-width: 1440px;
-  padding: 36px 40px 0;
+  padding: var(--space-9) var(--space-10) 0;
   margin: auto;
 }
 .footer {
   max-width: 1440px;
-  padding: 24px 40px;
+  padding: var(--space-6) var(--space-10);
   margin: auto;
-  border-top: 1px solid #dce3ed;
+  border-top: 1px solid var(--color-border);
   display: flex;
   justify-content: space-between;
-  gap: 20px;
-  color: #52627a;
+  gap: var(--space-5);
+  color: var(--color-muted);
   font-size: 0.72rem;
 }
 @media (max-width: 760px) {
   .nav {
-    padding: 0 20px;
+    padding: 0 var(--space-5);
     min-height: 72px;
   }
   .navLabel {
     display: none;
   }
   .main {
-    padding: 24px 20px 0;
+    padding: var(--space-6) var(--space-5) 0;
   }
   .footer {
-    padding: 20px;
+    padding: var(--space-5);
     flex-direction: column;
-    gap: 8px;
+    gap: var(--space-2);
   }
+}
+
+.skipLink {
+  position: fixed;
+  z-index: 10;
+  top: var(--space-2);
+  left: var(--space-2);
+  transform: translateY(-200%);
+  background: var(--color-surface);
+  color: var(--color-primary);
+  padding: var(--space-3);
+  border-radius: 6px;
+}
+.skipLink:focus {
+  transform: translateY(0);
 }

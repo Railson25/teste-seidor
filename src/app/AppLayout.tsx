@@ -4,7 +4,7 @@ import styles from './AppLayout.module.css';
 export function AppLayout({ children }: PropsWithChildren) {
   return (
     <>
-      <a className="skipLink" href="#main">
+      <a className={styles.skipLink} href="#main">
         Pular para o conteúdo
       </a>
       <header className={styles.topbar}>

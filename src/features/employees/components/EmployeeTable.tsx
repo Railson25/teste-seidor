@@ -1,3 +1,5 @@
+import { TextField } from '../../../shared/ui/TextField/TextField';
+import { Button } from '../../../shared/ui/Button/Button';
 import type { Employee } from '../types/employee';
 import { PAGE_SIZE_OPTIONS } from '../constants/pagination';
 import { useEmployeeTable } from '../hooks/useEmployeeTable';
@@ -42,31 +44,27 @@ export function EmployeeTable({ employees, onEdit, onRemove, onInspect }: Props)
         </span>
       </div>
       <div className={styles.filters}>
-        <div>
-          <label htmlFor="filter-name">Buscar por nome</label>
-          <input
-            id="filter-name"
-            type="search"
-            placeholder="Nome do funcionário"
-            value={name}
-            onChange={(event) => updateName(event.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="filter-cpf">Filtrar por CPF</label>
-          <input
-            id="filter-cpf"
-            type="search"
-            inputMode="numeric"
-            placeholder="CPF completo ou parcial"
-            value={cpf}
-            onChange={(event) => updateCpf(event.target.value)}
-          />
-        </div>
+        <TextField
+          id="filter-name"
+          label="Buscar por nome"
+          type="search"
+          placeholder="Nome do funcionário"
+          value={name}
+          onChange={(event) => updateName(event.target.value)}
+        />
+        <TextField
+          id="filter-cpf"
+          label="Filtrar por CPF"
+          type="search"
+          inputMode="numeric"
+          placeholder="CPF completo ou parcial"
+          value={cpf}
+          onChange={(event) => updateCpf(event.target.value)}
+        />
         {(name || cpf) && (
-          <button className="textButton" onClick={clearFilters}>
+          <Button variant="text" onClick={clearFilters}>
             Limpar filtros
-          </button>
+          </Button>
         )}
       </div>
       {visible.length === 0 ? (
@@ -122,29 +120,29 @@ export function EmployeeTable({ employees, onEdit, onRemove, onInspect }: Props)
                     <td>
                       <div className={styles.actions}>
                         {onInspect && (
-                          <button
-                            className="textButton"
+                          <Button
+                            variant="text"
                             aria-label={`Ver cálculo de ${employee.name}`}
                             onClick={() => onInspect(employee)}
                           >
                             Cálculo
-                          </button>
+                          </Button>
                         )}
-                        <button
-                          className="textButton"
+                        <Button
+                          variant="text"
                           aria-label={`Editar ${employee.name}`}
                           onClick={() => onEdit(employee)}
                         >
                           Editar
-                        </button>
+                        </Button>
                         {onRemove && (
-                          <button
-                            className="textButton dangerText"
+                          <Button
+                            variant="dangerText"
                             aria-label={`Excluir ${employee.name}`}
                             onClick={() => onRemove(employee)}
                           >
                             Excluir
-                          </button>
+                          </Button>
                         )}
                       </div>
                     </td>
@@ -172,25 +170,25 @@ export function EmployeeTable({ employees, onEdit, onRemove, onInspect }: Props)
               <option key={size}>{size}</option>
             ))}
           </select>
-          <button
-            className="secondary"
+          <Button
+            variant="secondary"
             aria-label="Página anterior"
             disabled={currentPage === 1}
             onClick={() => setPage(currentPage - 1)}
           >
             ←
-          </button>
+          </Button>
           <span>
             {currentPage} / {pages}
           </span>
-          <button
-            className="secondary"
+          <Button
+            variant="secondary"
             aria-label="Próxima página"
             disabled={currentPage === pages}
             onClick={() => setPage(currentPage + 1)}
           >
             →
-          </button>
+          </Button>
         </div>
       </div>
     </section>

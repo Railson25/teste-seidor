@@ -1,7 +1,8 @@
+@import './tokens.css';
 :root {
-  font-family: Inter, 'Segoe UI', system-ui, sans-serif;
-  color: #1b2c45;
-  background: #f4f7fb;
+  font-family: var(--font-family-base);
+  color: var(--color-text);
+  background: var(--color-page);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -17,103 +18,25 @@ input,
 select {
   font: inherit;
 }
-button {
-  border: 1px solid transparent;
-  border-radius: 7px;
-  min-height: 44px;
-  padding: 10px 16px;
-  background: #194c91;
-  color: #fff;
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.15s;
-}
-button:hover {
-  background: #123a70;
-}
-button:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-button.secondary {
-  background: white;
-  border-color: #cbd5e3;
-  color: #344b6a;
-}
-button.secondary:hover {
-  background: #edf3fc;
-}
-button.textButton {
-  background: transparent;
-  color: #194c91;
-  padding: 8px;
-  min-height: 40px;
-}
-button.textButton:hover {
-  background: #edf3fc;
-}
-button.danger {
-  background: #af2633;
-}
-button.danger:hover {
-  background: #8c1e29;
-}
-button.dangerText {
-  color: #af2633;
-}
-button.iconButton {
-  background: transparent;
-  color: #52627a;
-  font-size: 1.5rem;
-  padding: 0 10px;
-}
 :focus-visible {
-  outline: 3px solid #2062be;
+  outline: var(--focus-ring);
   outline-offset: 3px;
 }
 label {
   display: block;
-  font-size: 0.8rem;
+  font-size: var(--font-size-label);
   font-weight: 600;
-  margin-bottom: 8px;
+  margin-bottom: var(--space-2);
 }
-input,
 select {
   width: 100%;
-  min-height: 44px;
-  border: 1px solid #bac7d9;
-  border-radius: 7px;
-  background: white;
-  padding: 10px 12px;
-  color: #1b2c45;
-  font-size: 0.875rem;
-}
-input::placeholder {
-  color: #687891;
-}
-input[aria-invalid='true'] {
-  border-color: #af2633;
-}
-small {
-  display: block;
-  font-size: 0.73rem;
-  line-height: 1.5;
-  color: #52627a;
-  margin-top: 6px;
-}
-.fieldError,
-.errorSummary {
-  color: #a51c2a;
-  font-size: 0.8rem;
-}
-.fieldError {
-  margin: 6px 0 0;
-}
-.errorSummary {
-  background: #fff0f0;
-  border-radius: 6px;
-  padding: 12px;
+  min-height: var(--control-height);
+  border: 1px solid var(--color-control-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  padding: 10px var(--space-3);
+  color: var(--color-text);
+  font-size: var(--font-size-control);
 }
 .srOnly {
   position: absolute;
@@ -125,107 +48,6 @@ small {
   clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
-}
-.skipLink {
-  position: fixed;
-  z-index: 10;
-  top: 8px;
-  left: 8px;
-  transform: translateY(-200%);
-  background: #fff;
-  color: #194c91;
-  padding: 12px;
-  border-radius: 6px;
-}
-.skipLink:focus {
-  transform: translateY(0);
-}
-dialog {
-  width: min(580px, calc(100% - 32px));
-  max-height: calc(100dvh - 48px);
-  border: 1px solid #dce3ed;
-  border-radius: 16px;
-  padding: 26px;
-  color: #1b2c45;
-  box-shadow: 0 24px 80px #10244830;
-}
-dialog::backdrop {
-  background: #10244880;
-}
-.dialogHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-.dialogHeader h2 {
-  font-size: 1.2rem;
-  margin: 0;
-}
-.formIntro {
-  color: #52627a;
-  line-height: 1.6;
-  font-size: 0.85rem;
-  margin: 12px 0 24px;
-}
-.formGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-.formGrid .wide {
-  grid-column: 1 / -1;
-}
-.dialogActions {
-  display: flex;
-  justify-content: end;
-  gap: 10px;
-  margin-top: 28px;
-  padding-top: 20px;
-  border-top: 1px solid #e7ecf3;
-}
-.calculation {
-  margin: 0;
-}
-.calculation > div {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 13px 0;
-  font-size: 0.85rem;
-}
-.calculation dt {
-  color: #52627a;
-}
-.calculation dd {
-  margin: 0;
-  font-weight: 600;
-  white-space: nowrap;
-}
-.calculation .calculationTotal {
-  border-top: 1px solid #dce3ed;
-  font-weight: 700;
-}
-.calculationTotal dt,
-.calculationTotal dd {
-  color: #194c91;
-}
-.calculationNote {
-  color: #52627a;
-  line-height: 1.6;
-  font-size: 0.78rem;
-}
-@media (max-width: 480px) {
-  dialog {
-    padding: 20px;
-  }
-  .formGrid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  .dialogActions {
-    flex-wrap: wrap;
-  }
 }
 @media (prefers-reduced-motion: reduce) {
   *,
