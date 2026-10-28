@@ -11,6 +11,7 @@ export function Dialog({ title, onClose, children }: PropsWithChildren<{ title: 
     return () => {
       dialog.close();
       if (previous instanceof HTMLElement && previous.isConnected) previous.focus();
+      else document.getElementById('new-employee')?.focus();
     };
   }, []);
   return <dialog ref={ref} aria-labelledby={titleId} onCancel={event => { event.preventDefault(); onClose(); }}>
