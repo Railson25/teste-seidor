@@ -6,9 +6,32 @@ import { STORAGE_KEY } from './state/storage';
 
 beforeEach(() => {
   localStorage.clear();
-  vi.spyOn(HTMLDialogElement.prototype, 'showModal').mockImplementation(function (this: HTMLDialogElement) { this.open = true; });
-  vi.spyOn(HTMLDialogElement.prototype, 'close').mockImplementation(function (this: HTMLDialogElement) { this.open = false; });
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: 1, employees: [{ id: '1', name: 'Pessoa fictícia', cpf: '52998224725', grossSalaryCents: 500000, socialSecurityCents: 50000, dependents: 2 }] }));
+  vi.spyOn(HTMLDialogElement.prototype, 'showModal').mockImplementation(function (
+    this: HTMLDialogElement,
+  ) {
+    this.open = true;
+  });
+  vi.spyOn(HTMLDialogElement.prototype, 'close').mockImplementation(function (
+    this: HTMLDialogElement,
+  ) {
+    this.open = false;
+  });
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify({
+      version: 1,
+      employees: [
+        {
+          id: '1',
+          name: 'Pessoa fictícia',
+          cpf: '52998224725',
+          grossSalaryCents: 500000,
+          socialSecurityCents: 50000,
+          dependents: 2,
+        },
+      ],
+    }),
+  );
 });
 
 it('cancela a exclusão e só remove após confirmação', async () => {

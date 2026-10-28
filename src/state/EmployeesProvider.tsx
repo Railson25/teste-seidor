@@ -18,11 +18,14 @@ export function EmployeesProvider({ children }: PropsWithChildren) {
   const [warning, setWarning] = useState(initial.warning);
   const [blocked, setBlocked] = useState(initial.blocked);
 
-  const commit = useCallback((action: EmployeeAction) => {
-    const next = employeeReducer(employees, action);
-    if (!blocked) setWarning(writeEmployees(next));
-    dispatch(action);
-  }, [employees, blocked]);
+  const commit = useCallback(
+    (action: EmployeeAction) => {
+      const next = employeeReducer(employees, action);
+      if (!blocked) setWarning(writeEmployees(next));
+      dispatch(action);
+    },
+    [employees, blocked],
+  );
 
   const resetStorage = useCallback(() => {
     const error = writeEmployees(employees);
@@ -30,8 +33,15 @@ export function EmployeesProvider({ children }: PropsWithChildren) {
     setBlocked(Boolean(error));
   }, [employees]);
 
-  const actions = useMemo(() => ({ commit, warning, resetStorage }), [commit, warning, resetStorage]);
-  return <EmployeesContext value={employees}><ActionsContext value={actions}>{children}</ActionsContext></EmployeesContext>;
+  const actions = useMemo(
+    () => ({ commit, warning, resetStorage }),
+    [commit, warning, resetStorage],
+  );
+  return (
+    <EmployeesContext value={employees}>
+      <ActionsContext value={actions}>{children}</ActionsContext>
+    </EmployeesContext>
+  );
 }
 
 export function useEmployees() {

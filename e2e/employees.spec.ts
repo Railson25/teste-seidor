@@ -11,7 +11,9 @@ async function fillEmployee(page: Page) {
   await page.getByLabel('Número de dependentes').fill('2');
 }
 
-test.beforeEach(async ({ page }) => { await page.goto('/'); });
+test.beforeEach(async ({ page }) => {
+  await page.goto('/');
+});
 
 test('CRUD, cálculo, persistência, filtros e confirmação de exclusão', async ({ page }) => {
   await fillEmployee(page);
@@ -61,15 +63,23 @@ test('dados corrompidos são preservados até a redefinição explícita', async
   await page.reload();
   await expect(page.getByRole('alert')).toContainText('Não foi possível recuperar');
   await page.getByRole('button', { name: 'Carregar exemplos' }).click();
-  expect(await page.evaluate(() => localStorage.getItem('quadro.employees.v1'))).toBe('{corrompido');
-  await page.getByRole('button', { name: 'Redefinir armazenamento com os dados desta sessão' }).click();
+  expect(await page.evaluate(() => localStorage.getItem('quadro.employees.v1'))).toBe(
+    '{corrompido',
+  );
+  await page
+    .getByRole('button', { name: 'Redefinir armazenamento com os dados desta sessão' })
+    .click();
   await expect(page.getByRole('alert')).toHaveCount(0);
   await page.reload();
   await expect(page.getByRole('row')).toHaveCount(4);
 });
 
 test('falha ao gravar mantém o CRUD funcionando nesta sessão', async ({ page }) => {
-  await page.evaluate(() => { Storage.prototype.setItem = () => { throw new DOMException('Quota', 'QuotaExceededError'); }; });
+  await page.evaluate(() => {
+    Storage.prototype.setItem = () => {
+      throw new DOMException('Quota', 'QuotaExceededError');
+    };
+  });
   await page.getByRole('button', { name: 'Carregar exemplos' }).click();
   await expect(page.getByRole('alert')).toContainText('apenas nesta sessão');
   await expect(page.getByRole('row')).toHaveCount(4);
@@ -91,7 +101,8 @@ test('diálogo mantém o foco, aceita Escape e devolve o foco ao acionador', asy
 });
 
 test('WCAG AA no painel, formulário inválido e memória de cálculo', async ({ page }) => {
-  const audit = () => new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+  const audit = () =>
+    new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
   expect((await audit()).violations).toEqual([]);
   await page.getByRole('button', { name: 'Carregar exemplos' }).click();
   expect((await audit()).violations).toEqual([]);
@@ -103,15 +114,19 @@ test('WCAG AA no painel, formulário inválido e memória de cálculo', async ({
   expect((await audit()).violations).toEqual([]);
 });
 
-test('layout móvel evita transbordamento da página e mantém controles acessíveis', async ({ page }) => {
+test('layout móvel evita transbordamento da página e mantém controles acessíveis', async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole('button', { name: 'Carregar exemplos' }).click();
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
-  expect((await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()).violations).toEqual([]);
+  expect(
+    (await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze())
+      .violations,
+  ).toEqual([]);
   await page.screenshot({ path: '.cache/mobile.png', fullPage: true });
   await fillEmployee(page);
   const bounds = await page.getByRole('dialog').boundingBox();
   expect(bounds!.width).toBeLessThan(390);
   await page.screenshot({ path: '.cache/mobile-form.png', fullPage: true });
 });
-

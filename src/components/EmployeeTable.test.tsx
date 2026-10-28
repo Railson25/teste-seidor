@@ -3,7 +3,14 @@ import userEvent from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
 import { EmployeeTable } from './EmployeeTable';
 
-const employee = { id: '1', name: 'Ágata Exemplo', cpf: '52998224725', grossSalaryCents: 500000, socialSecurityCents: 50000, dependents: 2 };
+const employee = {
+  id: '1',
+  name: 'Ágata Exemplo',
+  cpf: '52998224725',
+  grossSalaryCents: 500000,
+  socialSecurityCents: 50000,
+  dependents: 2,
+};
 
 it('combina filtros, ignora acentos e aceita CPF formatado', async () => {
   const user = userEvent.setup();
@@ -19,7 +26,11 @@ it('combina filtros, ignora acentos e aceita CPF formatado', async () => {
 });
 
 it('pagina e ajusta a página quando a lista encolhe', async () => {
-  const rows = Array.from({ length: 11 }, (_, index) => ({ ...employee, id: String(index), name: `Pessoa ${index}` }));
+  const rows = Array.from({ length: 11 }, (_, index) => ({
+    ...employee,
+    id: String(index),
+    name: `Pessoa ${index}`,
+  }));
   const { rerender } = render(<EmployeeTable employees={rows} onEdit={vi.fn()} />);
   expect(screen.queryByText('Pessoa 10')).not.toBeInTheDocument();
   await userEvent.click(screen.getByRole('button', { name: 'Próxima página' }));

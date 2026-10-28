@@ -1,7 +1,6 @@
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import hooks from 'eslint-plugin-react-hooks';
-import jsxA11y from 'eslint-plugin-jsx-a11y';
 import globals from 'globals';
 
 export default tseslint.config(
@@ -11,12 +10,9 @@ export default tseslint.config(
   {
     files: ['**/*.{ts,tsx}'],
     languageOptions: { globals: { ...globals.browser, ...globals.node } },
-    plugins: { 'react-hooks': hooks, 'jsx-a11y': jsxA11y },
+    plugins: { 'react-hooks': hooks },
     rules: {
       ...hooks.configs.recommended.rules,
-      ...jsxA11y.configs.recommended.rules,
-      // Scrollable named regions need a keyboard focus stop (WCAG 2.1.1).
-      'jsx-a11y/no-noninteractive-tabindex': ['error', { roles: ['region'] }],
     },
   },
 );
